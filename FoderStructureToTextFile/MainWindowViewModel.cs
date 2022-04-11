@@ -84,19 +84,28 @@ namespace FoderStructureToTextFile
         static void WalkDirectoryTree(ZlpDirectoryInfo root, int level)
         {
             ZlpDirectoryInfo[] subDirs = null;
+            ZlpFileInfo[] files = null;
 
             try
             {
                 subDirs = root.GetDirectories();
+                files = root.GetFiles();
+                foreach(var file in files)
+                {
+                    if (file.Name.Contains(".rfa"))
+                    {
+                        WriteToFile(Filename, file.Directory + "\t" + level.ToString() + "\t" + file.Name + "\t" + level.ToString());
+                    }
+                };
                 foreach (ZlpDirectoryInfo dirInfo in subDirs)
                 {
-                    WriteToFile(Filename, dirInfo.FullName + "\t" + level.ToString());
+                    //WriteToFile(Filename, dirInfo.FullName + "\t" + level.ToString());
                     WalkDirectoryTree(dirInfo, level + 1);
                 }
             }
             catch (Exception ex)
             {
-                //System.Windows.MessageBox.Show(e.ToString());
+                System.Windows.MessageBox.Show(ex.ToString());
             }
         }
 
